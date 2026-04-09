@@ -507,6 +507,23 @@ def draw():
                     if not opts.draw_turrets and not (pb_select[pb] and opts.draw_selected):
                         continue
 
+                    pb_world_location = get_pb_world_matrix(ob, pb_to_world_matrix, pb).translation
+
+                    # Draw the part forward and up vectors as orientation aids.
+                    forward_matrix = mathutils.Euler(item.forward).to_matrix()
+                    vec_forward = forward_matrix @ mathutils.Vector((0.0, 1.0, 0.0))
+                    vec_up = forward_matrix @ mathutils.Vector((0.0, 0.0, 1.0))
+
+                    coords = [pb_world_location, pb_world_location + vec_forward * 0.6]
+                    indices = [(0, 1)]
+                    col = blgd.turret_yaw_color_normal if not pb_select[pb] else blgd.turret_yaw_color_select
+                    batch_uni_polyline(coords, indices, col, line_width=1.2)
+
+                    coords = [pb_world_location, pb_world_location + vec_up * 0.45]
+                    indices = [(0, 1)]
+                    col = blgd.turret_pitch_color_normal if not pb_select[pb] else blgd.turret_pitch_color_select
+                    batch_uni_polyline(coords, indices, col, line_width=1.2)
+
                     yaw_rot = mathutils.Euler(item.forward)
                     yaw_rot[1] -= 1.570796132
                     yaw_rot[2] -= 1.570796132
@@ -518,7 +535,7 @@ def draw():
 
                     if item.yaw_weight:
                         col = blgd.turret_yaw_color_normal if not pb_select[pb] else blgd.turret_yaw_color_select
-                        final_matrix = mathutils.Matrix.LocRotScale(get_pb_world_matrix(ob, pb_to_world_matrix, pb).translation, yaw_rot, (0.5, 0.5, 0.5))
+                        final_matrix = mathutils.Matrix.LocRotScale(pb_world_location, yaw_rot, (0.5, 0.5, 0.5))
                         if item.yaw_limited:
                             yaw_limit_arc = -item.yaw_min + item.yaw_max
                             yaw_limit_arc_med = (item.yaw_min + item.yaw_max) / 2
@@ -532,7 +549,7 @@ def draw():
 
                     if item.pitch_weight:
                         col = blgd.turret_pitch_color_normal if not pb_select[pb] else blgd.turret_pitch_color_select
-                        final_matrix = mathutils.Matrix.LocRotScale(get_pb_world_matrix(ob, pb_to_world_matrix, pb).translation, pitch_rot, (0.5, 0.5, 0.5))
+                        final_matrix = mathutils.Matrix.LocRotScale(pb_world_location, pitch_rot, (0.5, 0.5, 0.5))
                         if item.pitch_limited:
                             pitch_limit_arc = -item.pitch_min + item.pitch_max
                             pitch_limit_arc_med = (item.pitch_min + item.pitch_max) / 2

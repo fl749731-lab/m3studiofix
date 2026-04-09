@@ -94,7 +94,7 @@ desc_draw_clothconstraints = 'Display cloth constraint volumes'
 desc_draw_ikjoints = 'Display IK joint relationship lines'
 desc_draw_shadowboxes = 'Display shadow box areas'
 desc_draw_warps = 'Display vertex warp influence areas'
-desc_draw_turrets = '#TODO: Display turret part vectors'
+desc_draw_turrets = 'Display turret part vectors and yaw/pitch limits'
 
 
 class OptionProperties(bpy.types.PropertyGroup):
